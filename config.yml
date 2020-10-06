@@ -1,0 +1,8 @@
+n_objs : 3
+n_vars : 10
+prob_name : 'DTLZ1'
+H : 3
+delta : 0.9
+nr : 2
+n_eval : 75000
+ratio : 0.03
