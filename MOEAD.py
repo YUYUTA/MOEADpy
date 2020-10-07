@@ -120,7 +120,6 @@ while n_fe < n_eval:
         B = determine_neighbor(W,T) #  re-compute neighbor
         
     n_gen+=1
-    print(n_fe)
     
 L = int(n_eval//1000)
 history_all = history_all[:n_eval]
