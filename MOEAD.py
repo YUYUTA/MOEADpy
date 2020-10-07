@@ -4,8 +4,9 @@
 
 import numpy as np
 import yaml
-import random
 from scipy.special import comb
+import os
+import pickle
 
 
 from WeightVector import SLD, AWA_transform, determine_neighbor
@@ -46,6 +47,16 @@ ratio = params['ratio'] # set adaption ratio
 
 OSC = CR() # set criteria for vector adaption
 
+################
+# define output files #
+################
+save_data = params['save_data']
+seed = params['seed']
+if save_data:
+    output = params['output']                                                       # set output of record in this run
+    os.makedirs(f'./{output}/{prob_name}', exist_ok=True)                                       # create a folder to include running results
+    
+
 #############
 # start program #
 #############
@@ -64,13 +75,13 @@ archive = init_archive([[Y[i],X[i]] for i in range(n_pop)]) # initialize unbound
 n_fe = len(W)
 n_gen = 1
 
-history_all = []
+history_all = [[[Y[i].tolist(), X[i].tolist()],i+1] for i in range(n_pop)]
 
 while n_fe < n_eval: 
     n_pop = len(W) # compute population size
     for i in range(n_pop):
         pool = []
-        if random.uniform(0.0,1.0) < delta: # determine selection pool by probability
+        if np.random.uniform(0.0,1.0) < delta: # determine selection pool by probability
             pool = B[i][:] # neighbor as the pool
         else:
             pool = [j for j in range(n_pop)] # population as the pool
@@ -83,7 +94,7 @@ while n_fe < n_eval:
         z = update_ref_point(z, yi_) # update reference point
         archive = update_archive(archive, [yi_, xi_]) # update unbounded external archive
         
-        history_all.append([yi_, n_fe, len(W)]) # record objective values and decision variables
+        history_all.append([[yi_.tolist(), xi_], n_fe]) # record objective values and decision variables
         
         nc = 0 # initialize the update counter
         while True:
@@ -109,14 +120,15 @@ while n_fe < n_eval:
         B = determine_neighbor(W,T) #  re-compute neighbor
         
     n_gen+=1
+    print(n_fe)
     
 L = int(n_eval//1000)
 history_all = history_all[:n_eval]
             
             
-        
-            
-
+if save_data:
+    with open(f'{output}/{prob_name}/{seed}.pkl', 'wb') as pkl:
+        pickle.dump(history_all , pkl)
 
 
 

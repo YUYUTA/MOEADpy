@@ -6,3 +6,6 @@ delta : 0.9
 nr : 2
 n_eval : 75000
 ratio : 0.03
+save_data : True
+output : 'output'
+seed : 0
