@@ -3,7 +3,7 @@ import numpy as np
 import random
 
 def DefferentialEvolution(ind1,ind2,ind3,numberOfVariables,maxi=1.0):
-    C =  0.9
+    C =  1.0
     F = 0.5
     ita = 20
     ita_pow = 1/(ita+1)
